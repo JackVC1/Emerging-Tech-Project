@@ -26,10 +26,10 @@ npm install
 
 2. Start the development server:
 ```
-npm start
+npm run dev
 ```
 
-3. Open your browser to `http://localhost:3000`
+3. The application will automatically open in your browser
 
 ## Technologies Used
 - React 18

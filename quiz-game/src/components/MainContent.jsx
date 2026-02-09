@@ -1,10 +1,13 @@
 import React from 'react';
+import Quiz from './Quiz';
+import Rules from './Rules';
 
-function MainContent() {
+function MainContent({ view }) {
   return (
     <main className="main-content">
       <div className="content-container">
-        {/* Game content will go here in future iterations */}
+        {view === 'home' && <Quiz />}
+        {view === 'rules' && <Rules />}
       </div>
     </main>
   );
