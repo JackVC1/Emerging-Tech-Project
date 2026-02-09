@@ -90,6 +90,11 @@ body {
   overflow: hidden;
 }
 
+/* HUD: scoreboard top-left, timer top-right */
+.quiz-hud{ position:absolute; top:1.8rem; right:2.6rem; display:flex; gap:0.8rem; align-items:center; pointer-events:none; }
+.scoreboard{ background:transparent; color:var(--text-black); font-weight:800; pointer-events:auto; }
+.timer{ background:transparent; color:var(--text-black); font-weight:800; pointer-events:auto; }
+
 /* Quiz specific styling */
 .quiz-title{ font-size: 1rem; color: var(--text-black); margin-bottom: 0.6rem; }
 .question-text{
