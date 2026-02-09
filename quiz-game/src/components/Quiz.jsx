@@ -55,6 +55,15 @@ function Quiz() {
     }
   }
 
+  function previousQuestion() {
+    // go back one question if possible
+    if (currentIndex > 0) {
+      setCurrentIndex(i => i - 1);
+      setSelected(null);
+      setShowFeedback(false);
+    }
+  }
+
   return (
     <section className="quiz">
       <h2 className="quiz-title">Question {currentIndex + 1} of {questions.length}</h2>
@@ -67,17 +76,39 @@ function Quiz() {
         </div>
       )}
 
-      <div className="options">
-        {question.options.map((opt, idx) => (
+      {/* Options with back and next buttons in a row */}
+      <div className="qa-row">
+        <div className="back-col">
           <button
-            key={idx}
-            className={`option ${selected === idx ? 'selected' : ''} ${showFeedback && opt.isCorrect ? 'correct' : ''} ${showFeedback && selected === idx && !opt.isCorrect ? 'incorrect' : ''}`}
-            onClick={() => selectAnswer(idx)}
-            disabled={selected !== null}
-          >
-            {opt.text}
-          </button>
-        ))}
+            onClick={previousQuestion}
+            className="back-btn"
+            aria-label="Previous question"
+            disabled={currentIndex === 0}
+            type="button"
+          />
+        </div>
+
+        <div className="options">
+          {question.options.map((opt, idx) => (
+            <button
+              key={idx}
+              className={`option ${selected === idx ? 'selected' : ''} ${showFeedback && opt.isCorrect ? 'correct' : ''} ${showFeedback && selected === idx && !opt.isCorrect ? 'incorrect' : ''}`}
+              onClick={() => selectAnswer(idx)}
+              disabled={selected !== null}
+            >
+              {opt.text}
+            </button>
+          ))}
+        </div>
+
+        <div className="next-col">
+          <button
+            onClick={nextQuestion}
+            className="next-btn"
+            aria-label={currentIndex < questions.length - 1 ? 'Next question' : 'Restart quiz'}
+            type="button"
+          />
+        </div>
       </div>
 
       {showFeedback && (
@@ -89,10 +120,6 @@ function Quiz() {
           )}
         </div>
       )}
-
-      <div className="quiz-controls">
-        <button onClick={nextQuestion} className="next-btn">{currentIndex < questions.length - 1 ? 'Next' : 'Restart'}</button>
-      </div>
 
     </section>
   );
