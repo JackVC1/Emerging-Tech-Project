@@ -1,11 +1,37 @@
-import React, { useState } from 'react';
-import questions from '../data/questions';
+import React, { useState, useEffect } from 'react';
+import localQuestions from '../data/questions';
+import { generateFlagQuestions } from '../api/restCountries';
 
 function Quiz() {
+  const [questions, setQuestions] = useState(localQuestions);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [score, setScore] = useState(0);
   const [showFeedback, setShowFeedback] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const q = await generateFlagQuestions(100);
+        if (mounted) setQuestions(q);
+      } catch (err) {
+        console.error('REST Countries API failed, using local questions', err);
+        if (mounted) {
+          setError(err);
+          setQuestions(localQuestions);
+        }
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => (mounted = false);
+  }, []);
+
+  if (loading) return <div>Loading questions…</div>;
 
   const question = questions[currentIndex];
 
@@ -33,6 +59,13 @@ function Quiz() {
     <section className="quiz">
       <h2 className="quiz-title">Question {currentIndex + 1} of {questions.length}</h2>
       <div className="question-text">{question.prompt}</div>
+
+      {/* show flag when available */}
+      {question.flag && (
+        <div className="flag-wrap">
+          <img src={question.flag} alt={`Flag`} className="flag-image" />
+        </div>
+      )}
 
       <div className="options">
         {question.options.map((opt, idx) => (
